@@ -10,9 +10,9 @@ import (
 
 type Log struct {
 	Timestamp time.Time
-	Username string
+	Username  string
 	Operation string
-	Size int
+	Size      int
 }
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	processLogs(logs)
 }
 
-func csvReader() []Log{
+func csvReader() []Log {
 	logs := make([]Log, 0)
 	recordFile, err := os.Open("./main/server_log.csv")
 	if err != nil {
@@ -31,9 +31,9 @@ func csvReader() []Log{
 	reader := csv.NewReader(recordFile)
 	records, _ := reader.ReadAll()
 
-	for _,record := range records {
+	for _, record := range records {
 		var data Log
-		tstamp,err := time.Parse(time.UnixDate,record[0])
+		tstamp, err := time.Parse(time.UnixDate, record[0])
 		if err != nil {
 			fmt.Println("An error encountered parsing timestamp::", err)
 		}
@@ -59,26 +59,26 @@ func processLogs(logs []Log) {
 	q2 := 0
 	q3 := 0
 
-	check1, _ := time.Parse(time.UnixDate,"Tue Apr 14 23:59:59 UTC 2020")
-	check2, _ := time.Parse(time.UnixDate,"Thu Apr 16 00:00:00 UTC 2020")
+	check1, _ := time.Parse(time.UnixDate, "Tue Apr 14 23:59:59 UTC 2020")
+	check2, _ := time.Parse(time.UnixDate, "Thu Apr 16 00:00:00 UTC 2020")
 
-	for _,log := range logs {
+	for _, log := range logs {
 		if val, ok := q1[log.Username]; ok {
 			q1[log.Username] += val
 		} else {
 			q1[log.Username] = 1
 		}
 
-		if log.Size > 50 {
+		if log.Operation == "upload" && log.Size > 50 {
 			q2 += 1
 		}
 
-		if log.Username == "jeff22" && check1.Before(log.Timestamp) && check2.After(log.Timestamp){
+		if log.Username == "jeff22" && check1.Before(log.Timestamp) && check2.After(log.Timestamp) {
 			q3 += 1
 		}
 	}
 
-	fmt.Println("Unique Users : " +  strconv.Itoa(len(q1)))
+	fmt.Println("Unique Users : " + strconv.Itoa(len(q1)))
 	fmt.Println("Uploads larger than 50kb : " + strconv.Itoa(q2))
 	fmt.Println("User 'jeff22' on Apr 15th : " + strconv.Itoa(q3))
 }
