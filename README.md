@@ -45,4 +45,6 @@ of the various systems for processing. thinking about it very quickly maybe this
 be the processor. Its job would be to pick up the logs off of the queue and "process" them. For sake of argument maybe there is some sanitization or dedup work that needs
 to be done before pushing the logs to something like Kibana. Piece 3 is Kibana or something like it where an end user could dictate any questions he/she wanted against 
 the logs. 
+
+With more time I would also add testing, not only around questions like the ones posed in the exercise but also around possible edgecase scenarios. IE missing/invalid data in a log
     
